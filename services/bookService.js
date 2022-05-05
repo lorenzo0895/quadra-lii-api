@@ -3,7 +3,7 @@ const Flats = require("../modules/Flats");
 const limitDays = 45;
 
 const getAllBooks = async () => {
-  return await Books.find();
+  return await Books.find().populate('flat', 'flat');;
 };
 
 const getBooksBetween = () => {};
