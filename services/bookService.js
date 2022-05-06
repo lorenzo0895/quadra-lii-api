@@ -60,7 +60,7 @@ const createBook = async (flat, password, day, hour) => {
     hour: hour,
     flat: flat1.id,
   })
-    .then((book) => book)
+    .then((book) => book.populate('flat', 'flat'))
     .catch((error) => {
       return { error: "Ocurrió un error al crear la reserva" };
     });
