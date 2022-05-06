@@ -28,9 +28,16 @@ const createBook = async (flat, password, day, hour) => {
   if (hour != "day" && hour != "night") {
     return { error: "Horario no compatible" };
   }
-  let limit = new Date();
+  let today = new Date();
+  today.setHours(-3,0,0,0);
+  const date = new Date(day);
+  let limit = new Date(today);
+  if (limit.getTime() > date.getTime()) {
+    return {
+      error: "La reserva no puede realizarse para un día que ya pasó",
+    }
+  }
   limit = limit.setDate(limit.getDate() + limitDays);
-  const date = new Date(day).getTime();
   if (date > limit) {
     return {
       error: "La reserva no puede realizarse para dentro de más de 45 días",
