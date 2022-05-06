@@ -3,8 +3,13 @@ const Flats = require("../modules/Flats");
 const limitDays = 45;
 
 const getAllBooks = async () => {
-  return await Books.find().populate('flat', 'flat');;
+  return await Books.find().populate('flat', 'flat');
 };
+
+const getBooksFromDay = async (id) => {
+  const date = new Date(id);
+  return await Books.find({day: date}).populate('flat', 'flat');
+}
 
 const getBooksBetween = () => {};
 
@@ -85,4 +90,4 @@ const deleteBook = async (day, hour, password) => {
   })
 };
 
-module.exports = { getAllBooks, getBooksBetween, createBook, deleteBook };
+module.exports = { getAllBooks, getBooksBetween, createBook, deleteBook, getBooksFromDay };

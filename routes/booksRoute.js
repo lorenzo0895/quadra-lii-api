@@ -6,6 +6,11 @@ router.get('/', async (req, res) => {
   res.json(await bookService.getAllBooks());
 })
 
+router.get('/:id', async (req, res) => {
+  const id = req.params.id;
+  res.json(await bookService.getBooksFromDay(id));
+})
+
 router.post('/', async (req, res) => {
   const { flat, password, day, hour } = req.body;
   try {
