@@ -11,6 +11,10 @@ const getBooksFromDay = async (id) => {
   return await Books.find({day: date}).populate('flat', 'flat');
 }
 
+const getBookFromId = async (id) => {
+  return await Books.find({_id: id}).populate('flat', 'flat');
+}
+
 const getBooksBetween = () => {};
 
 const createBook = async (flat, password, day, hour) => {
@@ -97,4 +101,4 @@ const deleteBook = async (day, hour, password) => {
   })
 };
 
-module.exports = { getAllBooks, getBooksBetween, createBook, deleteBook, getBooksFromDay };
+module.exports = { getAllBooks, getBooksBetween, createBook, deleteBook, getBooksFromDay, getBookFromId };
