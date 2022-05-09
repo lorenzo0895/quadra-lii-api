@@ -1,4 +1,5 @@
 const Flats = require("../modules/Flats");
+const bcrypt = require("bcryptjs")
 
 const getFlats = async () => {
   try {
@@ -8,19 +9,20 @@ const getFlats = async () => {
   }
 };
 
-const createFlat = async (flat, password) => {
-  if (flat == undefined || password == undefined) {
-    return { error: "Debe ingresar todos los parámetros" };
-  }
-  return await Flats.create({
-    flat: flat,
-    password: password,
-  })
-    .then((flat) => flat)
-    .catch((error) => {
-      return { error: "Error al crear el departamento"};
-    });
-};
+// const createFlat = async (flat, password) => {
+//   if (flat == undefined || password == undefined) {
+//     return { error: "Debe ingresar todos los parámetros" };
+//   }
+//   let hash = await bcrypt.hash(password, 12);
+//   return await Flats.create({
+//     flat: flat,
+//     password: hash,
+//   })
+//     .then((flat) => flat)
+//     .catch((error) => {
+//       return { error: "Error al crear el departamento"};
+//     });
+// };
 
 const changePassword = async (flat, oldPassword, password1, password2) => {
   if (
@@ -41,10 +43,11 @@ const changePassword = async (flat, oldPassword, password1, password2) => {
 
   return await Flats.findOne({ flat: flat })
   .then(async flatToModify => {
-    if (flatToModify.password != oldPassword) {
+    if (! await bcrypt.compare(oldPassword, flatToModify.password)) {
       return { error: "La contraseña anterior no coincide" };
     }
-    flatToModify.password = password1;
+    let hash = await bcrypt.hash(password1, 12);
+    flatToModify.password = hash;
     return await flatToModify
       .save()
       .then((flat) => flat)
@@ -57,4 +60,4 @@ const changePassword = async (flat, oldPassword, password1, password2) => {
   });
 };
 
-module.exports = { getFlats, createFlat, changePassword };
+module.exports = { getFlats, changePassword };

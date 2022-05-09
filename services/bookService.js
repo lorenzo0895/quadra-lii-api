@@ -1,6 +1,7 @@
 const Books = require("../modules/Books");
 const Flats = require("../modules/Flats");
 const limitDays = 45;
+const bcrypt = require("bcryptjs")
 
 const getAllBooks = async () => {
   return await Books.find().populate('flat', 'flat');
@@ -51,7 +52,7 @@ const createBook = async (flat, password, day, hour) => {
   if (flat1 == undefined) {
     return { error: "No se encontró el departamento" };
   }
-  if (flat1.password != password) {
+  if (! await bcrypt.compare(password, flat1.password)) {
     return { error: "Contraseña incorrecta para el departamento" };
   }
   const book1 = await Books.findOne({ day: day, hour: hour });
@@ -86,7 +87,7 @@ const deleteBook = async (day, hour, password) => {
     return { error: "No se ha encontrado la reserva" };
   }
   const flat = await Flats.findById(book.flat);
-  if (flat.password != password) {
+  if (! await bcrypt.compare(password, flat.password)) {
     return {
       error: "La contraseña no corresponde al departamento que reservó.",
     };
